@@ -3,6 +3,21 @@ import sublime_plugin
 import uuid
 
 
+class RandomUuidCommand(sublime_plugin.TextCommand):
+
+    def run(self, edit):
+        for region in self.view.sel():
+            self.view.replace(edit, region, uuid.uuid4().urn.lstrip('urn:uuid:'))
+
+
+class DomainUuidCommand(sublime_plugin.TextCommand):
+
+    def run(self, edit):
+        for region in self.view.sel():
+            if not region.empty():
+                self.view.replace(edit, region, make_v5_uuid(uuid.NAMESPACE_DNS, self.view.substr(region)))
+
+
 class TextUuidCommand(sublime_plugin.TextCommand):
 
     def run(self, edit):
@@ -15,14 +30,7 @@ class TextUuidCommand(sublime_plugin.TextCommand):
 
         for region in self.view.sel():
             if not region.empty():
-                selected = self.view.substr(region)
-                generated_id = uuid.uuid5(namespace, selected)
+                self.view.replace(edit, region, make_v5_uuid(namespace, self.view.substr(region)))
 
-                self.view.replace(edit, region, generated_id.urn.lstrip('urn:uuid:'))
-
-
-class RandomUuidCommand(sublime_plugin.TextCommand):
-
-    def run(self, edit):
-        for region in self.view.sel():
-            self.view.replace(edit, region, uuid.uuid4().urn.lstrip('urn:uuid:'))
+def make_v5_uuid(namespace, string):
+    return uuid.uuid5(namespace, string).urn.lstrip('urn:uuid:')
