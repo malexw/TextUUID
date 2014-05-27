@@ -7,18 +7,20 @@ TextUUID is a Sublime Text 3 plugin for generating UUIDs from text strings. Text
 Suppose you wanted to create a UUID for a service called `login`. Select the phrase you would like to generate a UUID for, and run the `text_uuid` command.
 
 ```python
-SERVICE_ID = login
+SERVICE_ID = 'login'
 
-SERVICE_ID = 384ee5fc-87d6-5599-8b45-5ad4932525bc
+SERVICE_ID = '384ee5fc-87d6-5599-8b45-5ad4932525bc'
 ```
 
 I prefer to include a comment to remind me what string I used to generate the UUID.
 
 ```python
-SERVICE_ID = 384ee5fc-87d6-5599-8b45-5ad4932525bc # login
+SERVICE_ID = '384ee5fc-87d6-5599-8b45-5ad4932525bc' # login
 ```
 
-TextUUID also includes a command for generating completely random UUIDs, called `random_uuid`
+TextUUID includes a command for generating UUIDs from fully-qualified domain names, called `domain_uuid`. This command generates a deterministic UUID in the DNS namespace defined in the UUID spec, RFC 4122.
+
+TextUUID also includes a command for generating completely random UUIDs, called `random_uuid`.
 
 ## Installation
 
@@ -34,13 +36,14 @@ Out of the box, the UUIDs generated from TextUUID are not deterministic. TextUUI
 }
 ```
 
-The `random_uuid` command generates UUIDs that would be suitable for a namespace.
+The `random_uuid` and `domain_uuid` commands generate UUIDs that would be suitable for a namespace.
 
 You may also wish to set up key bindings for these commands. Under Preferences > Key Bindings - User, you could add settings like this:
 
 ```json
 [
     {"keys": ["super+u"], "command": "text_uuid"},
-    {"keys": ["ctrl+super+u"], "command": "random_uuid"}
+    {"keys": ["ctrl+super+u"], "command": "domain_uuid"},
+    {"keys": ["ctrl+shift+super+u"], "command": "random_uuid"}
 ]
 ```
